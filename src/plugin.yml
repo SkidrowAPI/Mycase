@@ -1,0 +1,5 @@
+name: NewYearscase
+main: ru.skidrowapi.newyearscase.Loader
+version: 1.0
+description: New Year's case
+author: SkidrowAPI

@@ -1,0 +1,62 @@
+case:
+  1:
+    1:
+      item: BOW
+      enchant: ARROW_DAMAGE
+      lvl: 1
+      amount: 1
+    2:
+      item: IC2:itemOreIridium
+      enchant:
+      lvl:
+      amount: 16
+    amount_item: 2
+  2:
+    1:
+      item: BOW
+      enchant: ARROW_DAMAGE
+      lvl: 2
+      amount: 1
+    2:
+      item: IC2:itemOreIridium
+      enchant:
+      lvl:
+      amount: 8
+    amount_item: 2
+  3:
+    1:
+      item: BOW
+      enchant: ARROW_DAMAGE
+      lvl: 3
+      amount: 1
+    2:
+      item: IC2:itemOreIridium
+      enchant:
+      lvl:
+      amount: 16
+    amount_item: 2
+  4:
+    1:
+      item: BOW
+      enchant: ARROW_DAMAGE
+      lvl:
+      amount: 1
+    2:
+      item: IC2:itemOreIridium
+      enchant:
+      lvl:
+      amount: 16
+    amount_item: 2
+  5:
+    1:
+      item: BOW
+      enchant: ARROW_DAMAGE
+      lvl: 5
+      amount: 1
+    2:
+      item: IC2:itemOreIridium
+      enchant:
+      lvl:
+      amount: 16
+    amount_item: 2
+  time: 60 #сеунды
