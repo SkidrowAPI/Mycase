@@ -10,7 +10,6 @@ case:
       enchant:
       lvl:
       amount: 16
-    amount_item: 2
   2:
     1:
       item: BOW
@@ -22,7 +21,6 @@ case:
       enchant:
       lvl:
       amount: 8
-    amount_item: 2
   3:
     1:
       item: BOW
@@ -34,7 +32,6 @@ case:
       enchant:
       lvl:
       amount: 16
-    amount_item: 2
   4:
     1:
       item: BOW
@@ -46,7 +43,6 @@ case:
       enchant:
       lvl:
       amount: 16
-    amount_item: 2
   5:
     1:
       item: BOW
@@ -58,5 +54,4 @@ case:
       enchant:
       lvl:
       amount: 16
-    amount_item: 2
-  time: 60 #сеунды
+  time: 60 #секунды
