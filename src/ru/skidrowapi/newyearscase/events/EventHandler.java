@@ -14,25 +14,30 @@ import ru.skidrowapi.newyearscase.Loader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class EventHandler implements Listener {
-    int id;
+    int id,task;
     private Loader plugin;
     public EventHandler(Loader intance) {
         plugin = intance;
     }
+    private List<Player> list;
 
     @org.bukkit.event.EventHandler
     void onPlayerQuitEvent(PlayerQuitEvent e){
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
-        scheduler.cancelTask(this.id);
+        Player p = e.getPlayer();
+        list.remove(p);
+
     }
 
 
     @org.bukkit.event.EventHandler
     void onPlayerJoinEvent(PlayerJoinEvent e) {
         Player p = e.getPlayer();
+        list.add(p);
         shed(p);
     }
 
@@ -42,7 +47,12 @@ public class EventHandler implements Listener {
         this.id=scheduler.scheduleAsyncRepeatingTask(plugin, new Runnable() {
             @Override
             public void run() {
-                reward(p);
+                for (int i=0;i<=list.size()-1;i++) {
+                    if (list.get(i) == p) {
+                        reward(p);
+                        break;
+                    }
+                }
             }
         }, 20L*time, 20L*time);
     }
@@ -61,8 +71,8 @@ public class EventHandler implements Listener {
         ch.clear();
         int num_case=c,amount,lvl,amont_item;
         String enchant,material;
-        amont_item=plugin.getConfig().getInt("case."+c+"."+"amount_item");
-        for (int i=1; i<=amont_item;i++){
+        for (int i=1; i<=3*9;i++){
+            if(!(plugin.getConfig().isConfigurationSection("case."+c+"."+i)))break;
             material=plugin.getConfig().getString("case."+c+"."+i+"."+"item");
             enchant=plugin.getConfig().getString("case."+c+"."+i+"."+"enchant");
             amount=plugin.getConfig().getInt("case."+c+"."+i+"."+"amount");
