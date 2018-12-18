@@ -72,22 +72,25 @@ public class EventHandler implements Listener {
         int num_case=c,amount,lvl,amont_item;
         String enchant,material;
         for (int i=1; i<=3*9;i++){
-            if(!(plugin.getConfig().isConfigurationSection("case."+c+"."+i)))break;
-            material=plugin.getConfig().getString("case."+c+"."+i+"."+"item");
-            enchant=plugin.getConfig().getString("case."+c+"."+i+"."+"enchant");
-            amount=plugin.getConfig().getInt("case."+c+"."+i+"."+"amount");
-            lvl=plugin.getConfig().getInt("case."+c+"."+i+"."+"lvl");
-            ItemStack item=new ItemStack(Material.matchMaterial(material),amount);
-            if (enchant!=null){
-                if(lvl==0){lvl=1;}
-                item.addEnchantment(Enchantment.getByName(enchant),lvl);
+            if(plugin.getConfig().isConfigurationSection("case."+c+"."+i)==true){
+                material = plugin.getConfig().getString("case." + c + "." + i + "." + "item");
+                enchant = plugin.getConfig().getString("case." + c + "." + i + "." + "enchant");
+                amount = plugin.getConfig().getInt("case." + c + "." + i + "." + "amount");
+                lvl = plugin.getConfig().getInt("case." + c + "." + i + "." + "lvl");
+                ItemStack item = new ItemStack(Material.matchMaterial(material), amount);
+                if (enchant != null) {
+                    if (lvl == 0) {
+                        lvl = 1;
+                    }
+                    item.addEnchantment(Enchantment.getByName(enchant), lvl);
+                }
+                ItemMeta item_m = item.getItemMeta();
+                List<String> lore = new ArrayList<>();
+                lore.add(plugin.pluginPrefix);
+                item_m.setLore(lore);
+                item.setItemMeta(item_m);
+                ch.addItem(item);
             }
-            ItemMeta item_m=item.getItemMeta();
-            List<String> lore = new ArrayList<>();
-            lore.add(plugin.pluginPrefix);
-            item_m.setLore(lore);
-            item.setItemMeta(item_m);
-            ch.addItem(item);
         }
         p.openInventory(ch);
     }
