@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class EventHandler implements Listener {
-    int id, task;
+    int id;
     private Loader plugin;
 
     public EventHandler(Loader intance) {
