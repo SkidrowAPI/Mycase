@@ -1,6 +1,7 @@
 package ru.skidrowapi.newyearscase.events;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -66,28 +67,30 @@ public class EventHandler implements Listener {
     private void chest(Player p, int c) {
         Inventory ch = plugin.getServer().createInventory(new CaseHolder(), 3 * 9, plugin.pluginPrefix);
         ch.clear();
-        int num_case = c, amount, lvl, amont_item;
+        int num_case = c, amount, lvl;
         String enchant, material;
-        for (int i = 1; i <= ch.getSize(); i++) {
-            if (plugin.getConfig().isConfigurationSection("case." + c + "." + i) == true) {
-                material = plugin.getConfig().getString("case." + c + "." + i + "." + "item");
-                enchant = plugin.getConfig().getString("case." + c + "." + i + "." + "enchant");
-                amount = plugin.getConfig().getInt("case." + c + "." + i + "." + "amount");
-                lvl = plugin.getConfig().getInt("case." + c + "." + i + "." + "lvl");
-                ItemStack item = new ItemStack(Material.matchMaterial(material), amount);
-                if (enchant != null) {
-                    if (lvl == 0) {
-                        lvl = 1;
-                    }
-                    item.addEnchantment(Enchantment.getByName(enchant), lvl);
+
+
+        ConfigurationSection section = plugin.getConfig().getConfigurationSection("case."+c);
+        for(String string : section.getKeys(false)) {
+        ConfigurationSection section1 = section.getConfigurationSection(string);
+            material = section1.getString("item");
+            enchant = section1.getString( "enchant");
+            amount = section1.getInt( "amount");
+            lvl = section1.getInt(section1+ "lvl");
+            ItemStack item = new ItemStack(Material.matchMaterial(material), amount);
+            if (enchant != null) {
+                if (lvl == 0) {
+                    lvl = 1;
                 }
-                ItemMeta item_m = item.getItemMeta();
-                List<String> lore = new ArrayList<>();
-                lore.add(plugin.pluginPrefix);
-                item_m.setLore(lore);
-                item.setItemMeta(item_m);
-                ch.addItem(item);
+                item.addEnchantment(Enchantment.getByName(enchant), lvl);
             }
+            ItemMeta item_m = item.getItemMeta();
+            List<String> lore = new ArrayList<>();
+            lore.add(plugin.pluginPrefix);
+            item_m.setLore(lore);
+            item.setItemMeta(item_m);
+            ch.addItem(item);
         }
         p.openInventory(ch);
     }
