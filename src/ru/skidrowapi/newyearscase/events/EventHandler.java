@@ -27,7 +27,7 @@ public class EventHandler implements Listener {
         plugin = intance;
     }
 
-    private Map<Player,Integer> map;
+    private Map<Player, Integer> map;
 
     @org.bukkit.event.EventHandler
     void onPlayerQuitEvent(PlayerQuitEvent e) {
@@ -48,8 +48,8 @@ public class EventHandler implements Listener {
         int time = plugin.getConfig().getInt("case.time");
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         this.id = scheduler.scheduleAsyncRepeatingTask(plugin, () -> {
-            if (map.get(p)!=null){
-                map.put(p,id);
+            if (map.get(p) != null) {
+                map.put(p, id);
             }
             reward(p);
         }, 20L * time, 20L * time);
@@ -71,13 +71,13 @@ public class EventHandler implements Listener {
         String enchant, material;
 
 
-        ConfigurationSection section = plugin.getConfig().getConfigurationSection("case."+c);
-        for(String string : section.getKeys(false)) {
-        ConfigurationSection section1 = section.getConfigurationSection(string);
+        ConfigurationSection section = plugin.getConfig().getConfigurationSection("case." + c);
+        for (String string : section.getKeys(false)) {
+            ConfigurationSection section1 = section.getConfigurationSection(string);
             material = section1.getString("item");
-            enchant = section1.getString( "enchant");
-            amount = section1.getInt( "amount");
-            lvl = section1.getInt(section1+ "lvl");
+            enchant = section1.getString("enchant");
+            amount = section1.getInt("amount");
+            lvl = section1.getInt(section1 + "lvl");
             ItemStack item = new ItemStack(Material.matchMaterial(material), amount);
             if (enchant != null) {
                 if (lvl == 0) {
