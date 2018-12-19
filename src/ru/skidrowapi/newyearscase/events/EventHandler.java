@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitScheduler;
 import ru.skidrowapi.newyearscase.Loader;
+import ru.skidrowapi.newyearscase.holder.CaseHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,11 +64,11 @@ public class EventHandler implements Listener {
     }
 
     private void chest(Player p, int c) {
-        Inventory ch = plugin.getServer().createInventory(p, 3 * 9, plugin.pluginPrefix);
+        Inventory ch = plugin.getServer().createInventory(new CaseHolder(), 3 * 9, plugin.pluginPrefix);
         ch.clear();
         int num_case = c, amount, lvl, amont_item;
         String enchant, material;
-        for (int i = 1; i <= 3 * 9; i++) {
+        for (int i = 1; i <= ch.getSize(); i++) {
             if (plugin.getConfig().isConfigurationSection("case." + c + "." + i) == true) {
                 material = plugin.getConfig().getString("case." + c + "." + i + "." + "item");
                 enchant = plugin.getConfig().getString("case." + c + "." + i + "." + "enchant");
