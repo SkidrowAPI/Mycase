@@ -18,61 +18,57 @@ import java.util.Map;
 import java.util.Random;
 
 public class EventHandler implements Listener {
-    int id,task;
+    int id, task;
     private Loader plugin;
+
     public EventHandler(Loader intance) {
         plugin = intance;
     }
-    private List<Player> list;
+
+    private Map<Player,Integer> map;
 
     @org.bukkit.event.EventHandler
-    void onPlayerQuitEvent(PlayerQuitEvent e){
-        BukkitScheduler scheduler = plugin.getServer().getScheduler();
+    void onPlayerQuitEvent(PlayerQuitEvent e) {
         Player p = e.getPlayer();
-        list.remove(p);
-
+        BukkitScheduler scheduler = plugin.getServer().getScheduler();
+        scheduler.cancelTask(map.get(p));
+        map.remove(p);
     }
 
 
     @org.bukkit.event.EventHandler
     void onPlayerJoinEvent(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        list.add(p);
         shed(p);
     }
 
-    void shed(Player p){
-        int time=plugin.getConfig().getInt("case.time");
+    void shed(Player p) {
+        int time = plugin.getConfig().getInt("case.time");
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
-        this.id=scheduler.scheduleAsyncRepeatingTask(plugin, new Runnable() {
-            @Override
-            public void run() {
-                for (int i=0;i<=list.size()-1;i++) {
-                    if (list.get(i) == p) {
-                        reward(p);
-                        break;
-                    }
-                }
+        this.id = scheduler.scheduleAsyncRepeatingTask(plugin, () -> {
+            if (map.get(p)!=null){
+                map.put(p,id);
             }
-        }, 20L*time, 20L*time);
+            reward(p);
+        }, 20L * time, 20L * time);
     }
 
-    private void reward(Player p){
+    private void reward(Player p) {
         final Random random = new Random();
         int c = random.nextInt(5);
-        if (c==0){
+        if (c == 0) {
             c = random.nextInt(5);
         }
-        chest(p,c);
+        chest(p, c);
     }
 
-    private void chest(Player p , int c){
-        Inventory ch=plugin.getServer().createInventory(p,3*9,plugin.pluginPrefix);
+    private void chest(Player p, int c) {
+        Inventory ch = plugin.getServer().createInventory(p, 3 * 9, plugin.pluginPrefix);
         ch.clear();
-        int num_case=c,amount,lvl,amont_item;
-        String enchant,material;
-        for (int i=1; i<=3*9;i++){
-            if(plugin.getConfig().isConfigurationSection("case."+c+"."+i)==true){
+        int num_case = c, amount, lvl, amont_item;
+        String enchant, material;
+        for (int i = 1; i <= 3 * 9; i++) {
+            if (plugin.getConfig().isConfigurationSection("case." + c + "." + i) == true) {
                 material = plugin.getConfig().getString("case." + c + "." + i + "." + "item");
                 enchant = plugin.getConfig().getString("case." + c + "." + i + "." + "enchant");
                 amount = plugin.getConfig().getInt("case." + c + "." + i + "." + "amount");
@@ -94,7 +90,6 @@ public class EventHandler implements Listener {
         }
         p.openInventory(ch);
     }
-
 
 
 }
