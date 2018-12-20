@@ -49,14 +49,16 @@ public class EventHandler implements Listener {
     }
 
     void shedul(Player player) {
-        int time = plugin.getConfig().getInt("case.time");
+        long time =20L* plugin.getConfig().getInt("case.time");
+        plugin.getLogger().info(String.valueOf(plugin.getConfig().getInt("case.time")));
+        plugin.getLogger().info(String.valueOf(time));
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         this.id = scheduler.scheduleAsyncRepeatingTask(plugin, () -> {
             if (map.get(player) == null) {
                 map.put(player, id);
             }
             reward(player);
-        }, 20L * time, 20L * time);
+        }, time, time);
     }
 
     private void reward(Player player) {
