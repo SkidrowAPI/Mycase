@@ -23,8 +23,6 @@ public class EventHandler implements Listener {
     int id;
     private Loader plugin;
     private List<String> lore = new ArrayList<>();
-    private Map<Player, Integer> map;
-
 
     public EventHandler(Loader intance) {
         plugin = intance;
@@ -37,8 +35,8 @@ public class EventHandler implements Listener {
     void onPlayerQuitEvent(PlayerQuitEvent e) {
         Player player = e.getPlayer();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
-        scheduler.cancelTask(map.get(player));
-        map.remove(player);
+        scheduler.cancelTask(plugin.mapPlayerTask().get(player));
+        plugin.removePlayerTask(player);
     }
 
 
@@ -54,8 +52,8 @@ public class EventHandler implements Listener {
         plugin.getLogger().info(String.valueOf(time));
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         this.id = scheduler.scheduleAsyncRepeatingTask(plugin, () -> {
-            if (map.get(player) == null) {
-                map.put(player, id);
+            if (plugin.mapPlayerTask().get(player) == null) {
+                plugin.setPlayerTask(player, id);
             }
             reward(player);
         }, time, time);
