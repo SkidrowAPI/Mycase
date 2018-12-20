@@ -22,9 +22,12 @@ import java.util.Random;
 public class EventHandler implements Listener {
     int id;
     private Loader plugin;
+    private List<String> lore = new ArrayList<>();
+
 
     public EventHandler(Loader intance) {
         plugin = intance;
+        lore.add(plugin.pluginPrefix);
     }
 
     private Map<Player, Integer> map;
@@ -58,42 +61,36 @@ public class EventHandler implements Listener {
     private void reward(Player p) {
         final Random random = new Random();
         int c = random.nextInt(5);
-        if (c == 0) {
-            c = random.nextInt(5);
-        }
+        if (c == 0) c++;
         chest(p, c);
     }
 
     private void chest(Player p, int c) {
+        int amount;
+        String material;
         Inventory ch = plugin.getServer().createInventory(new CaseHolder(), 3 * 9, plugin.pluginPrefix);
+        p.sendMessage(plugin.pluginPrefix+plugin.getServer().getName());
         ch.clear();
-        int num_case = c, amount, lvl;
-        String enchant, material;
-
-
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("case." + c);
         for (String string : section.getKeys(false)) {
             ConfigurationSection section1 = section.getConfigurationSection(string);
+            List<String> enchantments = new ArrayList();
+            List<Integer> lvl = new ArrayList<>();
             material = section1.getString("item");
-            enchant = section1.getString("enchant");
+            enchantments = section1.getStringList("enchant");
             amount = section1.getInt("amount");
-            lvl = section1.getInt(section1 + "lvl");
+            lvl = section1.getIntegerList("lvl");
             ItemStack item = new ItemStack(Material.matchMaterial(material), amount);
-            if (enchant != null) {
-                if (lvl == 0) {
-                    lvl = 1;
-                }
-                item.addEnchantment(Enchantment.getByName(enchant), lvl);
+            int i = 0;
+            for (String en : enchantments) {
+                item.addEnchantment(Enchantment.getByName(en), lvl.get(i));
+                i++;
             }
             ItemMeta item_m = item.getItemMeta();
-            List<String> lore = new ArrayList<>();
-            lore.add(plugin.pluginPrefix);
             item_m.setLore(lore);
             item.setItemMeta(item_m);
             ch.addItem(item);
         }
         p.openInventory(ch);
     }
-
-
 }
