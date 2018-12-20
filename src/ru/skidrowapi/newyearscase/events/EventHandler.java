@@ -23,6 +23,7 @@ public class EventHandler implements Listener {
     int id;
     private Loader plugin;
     private List<String> lore = new ArrayList<>();
+    private Map<Player, Integer> map;
 
 
     public EventHandler(Loader intance) {
@@ -30,47 +31,47 @@ public class EventHandler implements Listener {
         lore.add(plugin.pluginPrefix);
     }
 
-    private Map<Player, Integer> map;
+
 
     @org.bukkit.event.EventHandler
     void onPlayerQuitEvent(PlayerQuitEvent e) {
-        Player p = e.getPlayer();
+        Player player = e.getPlayer();
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
-        scheduler.cancelTask(map.get(p));
-        map.remove(p);
+        scheduler.cancelTask(map.get(player));
+        map.remove(player);
     }
 
 
     @org.bukkit.event.EventHandler
     void onPlayerJoinEvent(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        shed(p);
+        Player player = e.getPlayer();
+        shedul(player);
     }
 
-    void shed(Player p) {
+    void shedul(Player player) {
         int time = plugin.getConfig().getInt("case.time");
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         this.id = scheduler.scheduleAsyncRepeatingTask(plugin, () -> {
-            if (map.get(p) != null) {
-                map.put(p, id);
+            if (map.get(player) == null) {
+                map.put(player, id);
             }
-            reward(p);
+            reward(player);
         }, 20L * time, 20L * time);
     }
 
-    private void reward(Player p) {
+    private void reward(Player player) {
         final Random random = new Random();
         int c = random.nextInt(5);
         if (c == 0) c++;
-        chest(p, c);
+        chest(player, c);
     }
 
-    private void chest(Player p, int c) {
+    private void chest(Player player, int c) {
         int amount;
         String material;
-        Inventory ch = plugin.getServer().createInventory(new CaseHolder(), 3 * 9, plugin.pluginPrefix);
-        p.sendMessage(plugin.pluginPrefix+plugin.getServer().getName());
-        ch.clear();
+        Inventory inventory = plugin.getServer().createInventory(new CaseHolder(), 3 * 9, plugin.pluginPrefix);
+        player.sendMessage(plugin.pluginPrefix+plugin.getServer().getName());   //для себя
+        inventory.clear();
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("case." + c);
         for (String string : section.getKeys(false)) {
             ConfigurationSection section1 = section.getConfigurationSection(string);
@@ -89,8 +90,8 @@ public class EventHandler implements Listener {
             ItemMeta item_m = item.getItemMeta();
             item_m.setLore(lore);
             item.setItemMeta(item_m);
-            ch.addItem(item);
+            inventory.addItem(item);
         }
-        p.openInventory(ch);
+        player.openInventory(inventory);
     }
 }
