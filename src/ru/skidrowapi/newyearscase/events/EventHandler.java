@@ -16,8 +16,8 @@ import ru.skidrowapi.newyearscase.holder.CaseHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
+
 
 public class EventHandler implements Listener {
     int id;
@@ -48,8 +48,6 @@ public class EventHandler implements Listener {
 
     void shedul(Player player) {
         long time =20L* plugin.getConfig().getInt("case.time");
-        plugin.getLogger().info(String.valueOf(plugin.getConfig().getInt("case.time")));
-        plugin.getLogger().info(String.valueOf(time));
         BukkitScheduler scheduler = plugin.getServer().getScheduler();
         this.id = scheduler.scheduleAsyncRepeatingTask(plugin, () -> {
             if (plugin.mapPlayerTask().get(player) == null) {
@@ -70,11 +68,11 @@ public class EventHandler implements Listener {
         int amount;
         String material;
         Inventory inventory = plugin.getServer().createInventory(new CaseHolder(), 3 * 9, plugin.pluginPrefix);
-        player.sendMessage(plugin.pluginPrefix+plugin.getServer().getName());   //для себя
-        inventory.clear();
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("case." + c);
+        player.sendMessage(plugin.pluginPrefix+" section-"+section);        //находит правильно
         for (String string : section.getKeys(false)) {
             ConfigurationSection section1 = section.getConfigurationSection(string);
+            player.sendMessage(plugin.pluginPrefix+" section1-"+section1);
             List<String> enchantments = new ArrayList();
             List<Integer> lvl = new ArrayList<>();
             material = section1.getString("item");

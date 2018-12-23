@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.skidrowapi.newyearscase.events.EventHandler;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Loader extends JavaPlugin {
@@ -14,13 +15,12 @@ public class Loader extends JavaPlugin {
 
     @Override
     public void onEnable(){
+        map = new HashMap<>();
         getServer().getPluginManager().registerEvents(new EventHandler(this),this);
     }
 
     @Override
-    public void onDisable(){
-
-    }
+    public void onDisable(){}
 
     public Map<Player, Integer> mapPlayerTask(){
         return map;
